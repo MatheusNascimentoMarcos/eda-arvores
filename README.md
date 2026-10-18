@@ -12,7 +12,9 @@ Os testes em `tests/` dizem se cada exercício está certo. **Nenhuma resposta e
 
 ```
 eda-arvores/
-├── Makefile
+├── CMakeLists.txt          build + testes via CMake/CTest (Windows, Linux, macOS)
+├── Makefile                build + testes via make (Linux, macOS, WSL)
+├── .vscode/settings.json   configuração do CMake Tools (pasta de build, args do debug)
 ├── include/
 │   ├── igor.hpp            struct NoBin + assinaturas da lista do Igor
 │   ├── lista2.hpp          class No / Arvore + assinaturas da Lista 2
@@ -34,29 +36,88 @@ eda-arvores/
     └── lista2_q02_passo_a_passo.md   desenhos da Q2 (árvore e vetor)
 ```
 
-## Como usar
+## Alvos de teste
 
-Requer `g++` (C++17) e `make`, em Linux, macOS ou WSL.
+| Alvo | Conteúdo | Exercícios (ids) |
+|---|---|---|
+| `p1` | Igor, Parte I (binárias) | 1a 1b 1c 1d 1e 1f 1g 1h |
+| `p2` | Igor, Parte II (BST) | 2 2b 2x 3 4 5 6 7 7x 8 8x |
+| `p3` | Igor, Parte III (AVL) | 9 10 |
+| `p4` | Igor, Parte IV (heap) | 11 12 |
+| `q1` | Lista 2, Q1 (confere sua resposta manual com o seu código) | 1a 1b 1c |
+| `q2` | Lista 2, Q2 (heap) | 2a 2b |
+| `q3` | Lista 2, Q3 (árvore) | 3a 3b 3c 3d 3e 3f 3g 3h |
 
-```bash
-make p1            # Igor, Parte I      (1.a–1.h)
-make p2            # Igor, Parte II     (2–8)
-make p3            # Igor, Parte III    (9–10)
-make p4            # Igor, Parte IV     (11–12)
-make q1            # Lista 2, Q1 (confere sua resposta manual com o seu código)
-make q2            # Lista 2, Q2
-make q3            # Lista 2, Q3
-make test          # tudo de uma vez
-make p1 ARGS="1c 1d"     # só alguns exercícios (o id aparece entre [colchetes])
-make check-regras        # procura <algorithm>, std::max/min/sort... em src/
-```
-
-Cada exercício aparece como `OK`, `FALHOU` (com obtido x esperado), `PENDENTE` (ainda tem `TODO()`),
-`CRASH` (segfault) ou `TIMEOUT` (loop infinito, limite de 5 s). Um exercício quebrado não derruba os outros.
-Por padrão compila com AddressSanitizer + UBSan (acusa acesso inválido à memória); `make SAN= p1` desliga.
+O resultado de cada exercício é `OK`, `FALHOU` (com obtido x esperado), `PENDENTE` (ainda tem `TODO()`),
+`CRASH` (segfault etc.) ou `TIMEOUT` (loop infinito, limite de 5 s). Um exercício quebrado não derruba os outros.
 
 **Fluxo:** abra o arquivo de `src/` → escreva a proposta e a complexidade nos comentários →
-implemente → **apague o `TODO();`** → `make pX`.
+implemente → **apague o `TODO();`** → compile e rode o alvo.
+
+## Opção A — CMake (Windows nativo, Linux, macOS)
+
+Não precisa de WSL. Instale uma vez:
+
+1. **CMake** (`winget install Kitware.CMake` no Windows).
+2. Um **compilador C++17**: no Windows, o *Build Tools for Visual Studio* (carga "Desenvolvimento para desktop com C++")
+   ou o MSYS2/MinGW-w64; em Linux/macOS, `g++` ou `clang++`.
+
+Linha de comando:
+
+```bash
+cmake -S . -B build-cmake                    # configura (uma vez)
+cmake --build build-cmake --target p1        # SÓ compila o alvo p1 (não roda nada)
+cmake --build build-cmake                    # compila todos os alvos
+```
+
+Rodar **depois**, isoladamente. O executável fica em `build-cmake/p1` (Ninja/MinGW/Linux/macOS) ou
+`build-cmake/Debug/p1.exe` (gerador do Visual Studio):
+
+```bash
+./build-cmake/p1                  # todos os exercícios da parte
+./build-cmake/p1 1c 1d            # só 1.c e 1.d (cada um num processo isolado)
+```
+
+Ou pelo CTest, que tem um teste por exercício (`p1.1c`, `p2.7x`, `q3.3e`...):
+
+```bash
+ctest --test-dir build-cmake -C Debug --output-on-failure                  # tudo
+ctest --test-dir build-cmake -C Debug -R "^p1\." --output-on-failure       # uma parte
+ctest --test-dir build-cmake -C Debug -R "^p1\.1c$" --output-on-failure    # um exercício
+```
+
+No CTest, exercício `PENDENTE` conta como falho (é um lembrete do que falta).
+Para compilar sem sanitizers: `-DSANITIZERS=OFF` (eles já vêm desligados no Windows).
+
+### No VS Code
+
+1. Instale as extensões **C/C++** e **CMake Tools** (Microsoft).
+2. **Ctrl+Shift+P → CMake: Select a Kit** e escolha o compilador.
+3. Na barra de status, escolha o **alvo** (`p1`…`q3`) e clique em **Build** (só compila).
+4. Painel **Testing** (frasco): rode um exercício, uma parte ou tudo; o botão de debug também funciona ali.
+5. Debug pela barra de status: troque o id em `.vscode/settings.json` (`"args": ["--run", "1c"]`) e aperte o bug.
+
+O modo `--run <id>` roda no **mesmo processo**, sem isolamento — é ele que permite o depurador parar nos
+seus breakpoints. Use `./build-cmake/p1 --run 1c` também no terminal se quiser rodar sem criar processo filho.
+
+## Opção B — Makefile (Linux, macOS, WSL)
+
+```bash
+make p1 | p2 | p3 | p4      # compila e roda a parte
+make q1 | q2 | q3
+make test                   # tudo de uma vez
+make p1 ARGS="1c 1d"        # só alguns exercícios
+make build/p1               # SÓ compila (depois: ./build/p1 1c)
+make build-all              # compila todos, sem rodar (veja nota abaixo)
+make check-regras           # procura <algorithm>, std::max/min/sort... em src/
+make SAN= p1                # sem sanitizers (padrão: ASan + UBSan)
+make clean
+```
+
+> `make build-all` só existe se você adicionar ao `Makefile`:
+> `.PHONY: build-all` e `build-all: $(TESTES:%=$(BUILD)/%)`.
+
+O `make` não existe no PowerShell/Windows nativo: use a Opção A (ou o WSL).
 
 ## Regras do professor (valem para tudo em `src/`)
 
@@ -66,6 +127,8 @@ implemente → **apague o `TODO();`** → `make pX`.
 - Discuta a proposta e analise a complexidade de **cada** método (comentários `PROPOSTA:` /
   `COMPLEXIDADE:` ou `docs/igor_discussao.md`).
 - Os testes em `tests/` não seguem essas regras (só os arquivos de `src/` precisam seguir).
+- `make check-regras` (ou `grep -rn "algorithm\|std::max\|std::min" src`) ajuda a conferir;
+  o uso indevido de `operator=` não dá para detectar automaticamente.
 
 ## Convenções assumidas pelos testes
 
@@ -89,7 +152,11 @@ teste (`tests/...`) e/ou a constante indicada.
 ## Dicas
 
 - Comece pelos percursos e pela altura (1.e–1.h): quase tudo depende deles.
-- Para depurar, rode só o exercício: `make p1 ARGS="1d"`. Pode usar `printf` à vontade (apague depois).
-- Questão 1 da Lista 2: resolva no papel, digite em `src/lista2/q01_respostas.hpp` e rode `make q1`
+- Para depurar só um exercício: `./build-cmake/p1 --run 1d` (ou `make p1 ARGS="1d"`). Pode usar `printf` à vontade (apague depois).
+- Questão 1 da Lista 2: resolva no papel, digite em `src/lista2/q01_respostas.hpp` e rode `q1`
   depois de implementar a Q3(b–d).
-- `git init && git add . && git commit -m "esqueleto"` antes de começar ajuda a acompanhar seu progresso.
+- Questão 2 da Lista 2: os desenhos passo a passo vão em `docs/lista2_q02_passo_a_passo.md`.
+- Se algo falhar ao compilar no Windows, confira se o kit do CMake Tools é um compilador C++17
+  e apague a pasta `build-cmake/` para reconfigurar do zero.
+- Faça commits pequenos, um por exercício (`git add . && git commit -m "1.a estritaBin" && git push`).
+  A pasta `build/` e a `build-cmake/` não devem ir para o Git (veja o `.gitignore`).
