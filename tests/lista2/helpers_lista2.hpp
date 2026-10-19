@@ -8,7 +8,7 @@
 #include "testlib.hpp"
 
 // Convenção de altura: folha = ALTURA_FOLHA, nulo = ALTURA_FOLHA - 1.
-constexpr int ALTURA_FOLHA = 0;
+constexpr int ALTURA_FOLHA = 1;
 
 // Constrói a árvore a partir de um vetor em ordem de nível; -1 = nulo.
 // Para uma árvore COMPLETA (representação sequencial) basta passar os valores.
