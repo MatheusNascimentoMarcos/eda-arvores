@@ -7,7 +7,7 @@
 
 // Convenção de altura usada nos testes: folha = ALTURA_FOLHA, nulo = ALTURA_FOLHA - 1.
 // (Se a sua convenção é folha = 1 e nulo = 0, troque para 1.)
-constexpr int ALTURA_FOLHA = 0;
+constexpr int ALTURA_FOLHA = 1;
 
 // Constrói a árvore a partir de uma string em ordem de nível; '#' = nulo.
 // Ex.: "ABC#D" -> A(B(#,D), C)
