@@ -20,24 +20,45 @@
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto estritaBin(NoBin* no) -> bool {
-    TODO();
-    return false;
+    if (!no) return true;
+    if (!no->esq && !no->dir) return true;
+    if (!no->esq || !no->dir) return false;
+    return estritaBin(no->esq) && estritaBin(no->dir); 
 }
 
 // 1.b) Imprime a árvore em níveis. Imprima SÓ as chaves (separadas por espaço/linha).
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
+void imprimirNivelAtual(NoBin* no, int nivelAtual) {
+    if (!no) {
+        return;
+    }
+    
+    if (nivelAtual == 1) {
+        printf("%c ", no->chave);
+    } 
+    // Caso contrário, continua descendo reduzindo o contador de nível
+    else if (nivelAtual > 1) {
+        imprimirNivelAtual(no->esq, nivelAtual - 1);
+        imprimirNivelAtual(no->dir, nivelAtual - 1);
+    }
+}
+
 auto emNiveis(NoBin* no) -> void {
-    TODO();
+    int h = altura(no);
+    for (int i = 1; i <= h; i++) {
+        imprimirNivelAtual(no, i);
+    }
 }
 
 // 1.c) Perfeita: todos os nós internos têm 2 filhos e todas as folhas estão no mesmo nível.
 //      Árvore vazia => true.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: O(log N) devido a arvore perfeita
 auto ehPerfeita(NoBin* no) -> bool {
-    TODO();
-    return false;
+    if (!no) return true;
+    if (altura(no->esq) != altura(no->dir)) return false;
+    return ehPerfeita(no->esq) && ehPerfeita(no->dir);
 }
 
 // 1.d) Completa: todos os níveis cheios, exceto possivelmente o último, preenchido
@@ -45,7 +66,12 @@ auto ehPerfeita(NoBin* no) -> bool {
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto ehCompleta(NoBin* no) -> bool {
-    TODO();
+    if (!no) return true;
+    int he = altura(no->esq);
+    int hd = altura(no->dir);
+
+    if (he == hd)     return ehPerfeita(no->esq) && ehCompleta(no->dir);
+    if (he == hd + 1) return ehCompleta(no->esq) && ehPerfeita(no->dir);
     return false;
 }
 
@@ -54,27 +80,55 @@ auto ehCompleta(NoBin* no) -> bool {
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto altura(NoBin* no) -> int {
-    TODO();
-    return 0;
+    if (!no){return 0;}
+    int hd = altura(no->dir);
+    int he = altura(no->esq);
+    if (hd > he)
+    {
+        return hd + 1;
+    }
+    else
+    {
+        return he + 1;
+    }
 }
 
 // 1.f) Pré-ordem. Imprima só as chaves.
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto preordem(NoBin* no) -> void {
-    TODO();
+    if(no){
+        printf("%c ", no->chave);
+        preordem(no->esq);
+        preordem(no->dir);
+    }else{return;}
 }
 
 // 1.g) Pós-ordem. Imprima só as chaves.
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto posordem(NoBin* no) -> void {
-    TODO();
+    if (no)
+    {
+        posordem(no->esq);
+        posordem(no->dir);
+        printf("%c ", no->chave);
+    }else
+    {
+        return;
+    }
+    
 }
 
 // 1.h) In-ordem. Imprima só as chaves.
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto inorder(NoBin* no) -> void {
-    TODO();
+    if(no){
+        inorder(no->esq);
+        printf("%c ", no->chave);
+        inorder(no->dir);
+    }else{
+        return;
+    }
 }

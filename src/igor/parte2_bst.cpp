@@ -14,23 +14,45 @@
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto insere(char chave, NoBin* no) -> void {
-    TODO();
+    if (chave == no->chave) return;
+    if(no->chave < chave){
+        if (no->dir){
+            insere(chave,no->dir);
+        }else{
+            no->dir = new NoBin{chave, nullptr, nullptr};
+        }
+        
+    }else{
+        if (no->esq){
+            insere(chave,no->esq);
+        }else{
+            no->esq = new NoBin{chave, nullptr, nullptr};
+        }
+    }
 }
 
 // 3) Maior valor da BST. Árvore vazia => 'A'.
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto maior(NoBin* no) -> char {
-    TODO();
-    return 'A';
+    if(!no){return 'A';}
+    while (no->dir)
+    {
+        no = no->dir;
+    }
+    return no->chave;
 }
 
 // 4) Menor valor da BST. Árvore vazia => 'Z'.
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto menor(NoBin* no) -> char {
-    TODO();
-    return 'Z';
+    if(!no){return 'Z';}
+    while (no->esq)
+    {
+        no = no->esq;
+    }
+    return no->chave;
 }
 
 // 5) Verifica se a árvore binária é uma BST. Árvore vazia => true.
@@ -38,31 +60,62 @@ auto menor(NoBin* no) -> char {
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto ehBinariaBusca(NoBin* no) -> bool {
-    TODO();
-    return false;
+    if (!no) return true;
+    if (no->esq && maior(no->esq) >= no->chave) return false;
+    if (no->dir && menor(no->dir) <= no->chave) return false;
+    return ehBinariaBusca(no->esq) && ehBinariaBusca(no->dir);
 }
 
 // 6) Busca 'chave'. Retorna a chave se achar, '\0' se não achar.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: no pior cenário em caso de av degenerada O(h) e no cenário de av balanceada O(log N) por a cada nivel a gente escoher umentre os 2 nós possíveis
 auto busca(char chave, NoBin* no) -> char {
-    TODO();
-    return '\0';
+    if(no){
+        if (chave == no->chave){
+            return no->chave;
+        }
+        else{
+            if(chave < no->chave){
+                return busca(chave, no->esq);
+            }else{
+                return busca(chave, no->dir);
+            }
+        }
+    }else{
+        return '\0';
+    }   
 }
 
 // 7) Elemento imediatamente anterior a 'chave' (maior chave < 'chave'). '\0' se não existir.
 //    Nos testes a chave pode NÃO estar na árvore (teste "7x"); mude se discordar.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: O(h) por desecr sempre a altura da árvore
 auto anterior(char chave, NoBin* no) -> char {
-    TODO();
-    return '\0';
+    char melhor = '\0';
+    while (no) {
+        if (no->chave < chave) {
+            melhor = no->chave;
+            no = no->dir;
+        } else {
+            no = no->esq;
+        }
+    }
+    return melhor;
+
 }
 
 // 8) Elemento imediatamente posterior a 'chave' (menor chave > 'chave'). '\0' se não existir.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: O(h) por desecr sempre a altura da árvore
 auto posterior(char chave, NoBin* no) -> char {
-    TODO();
-    return '\0';
+    char melhor = '\0';
+    while (no) {
+        if (no->chave > chave) {
+            melhor = no->chave;
+            no = no->esq;
+        } else {
+            no = no->dir;
+        }
+    }
+    return melhor;
 }

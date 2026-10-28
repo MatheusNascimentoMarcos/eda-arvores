@@ -14,13 +14,41 @@
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto removeMax(int* heap, int N) -> int {
-    TODO();
-    return 0;
+    int max = heap[0];
+    N--;
+    int x = heap[N];
+
+    int i = 0;
+    int filho = i;
+    while (filho < N) {
+        filho = 2 * i + 1;
+        if (filho + 1 < N && heap[filho + 1] > heap[filho])
+            filho++;
+
+        if (heap[filho] <= x) break;
+
+        heap[i] = heap[filho];
+        i = filho;
+    }
+    heap[i] = x;
+
+    return max;
 }
 
 // 2(b) Insere 'valor' (heap tem N elementos e espaço em heap[N]). Novo tamanho = N+1.
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto insereHeap(int valor, int* heap, int N) -> void {
-    TODO();
+    int pos = N;
+    heap[pos] = valor;
+
+    while (pos > 0) {
+        int pai = (pos - 1) / 2;
+        if (heap[pos] <= heap[pai]) break;
+        int aux = heap[pos];
+        heap[pos] = heap[pai];
+        heap[pai] = aux;
+        pos = pai;
+    }
+    N++;
 }

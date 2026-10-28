@@ -14,8 +14,10 @@
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto ehHeap(int* heap, int N) -> bool {
-    TODO();
-    return false;
+    for (int i = 1; i < N; i++) {
+        if (heap[i] > heap[(i - 1) / 2]) return false;
+    }
+    return true;
 }
 
 // 12) Insere 'elemento' no heap de N elementos (há espaço livre em heap[N]).
@@ -23,5 +25,15 @@ auto ehHeap(int* heap, int N) -> bool {
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto novo(int elemento, int* heap, int N) -> void {
-    TODO();
+    int pos = N;
+    heap[pos] = elemento;
+    while (pos > 0) {
+        int pai = (pos - 1) / 2;
+        if (heap[pos] <= heap[pai]) break;
+        int aux = heap[pos];
+        heap[pos] = heap[pai];
+        heap[pai] = aux;
+        pos = pai;
+    }
+    N++;
 }

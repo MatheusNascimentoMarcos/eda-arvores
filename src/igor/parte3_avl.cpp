@@ -14,18 +14,26 @@
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto fator(NoBin* no) -> int {
-    TODO();
-    return 0;
+    if(!no){return 0;}
+    
+    return altura(no->esq) - altura(no->dir);
 }
 
 // 10) Dado um nó DESBALANCEADO, imprime qual rotação é necessária.
 //     Imprima EXATAMENTE um destes códigos (nada além dele):
 //        LL = esquerda-esquerda  -> rotação simples à direita
 //        RR = direita-direita    -> rotação simples à esquerda
-//        LR = esquerda-direita   -> rotação dupla (esq. no filho, depois dir. no nó)
-//        RL = direita-esquerda   -> rotação dupla (dir. no filho, depois esq. no nó)
+//        LR = esquerda-direita   -> rotação dupla à direita
+//        RL = direita-esquerda   -> rotação dupla à esquerda
 // PROPOSTA:
 // COMPLEXIDADE: tempo O(?)  espaço O(?)
 auto qualRotacao(NoBin* no) -> void {
-    TODO();
+    if (fator(no) == 2) {
+        if (fator(no->esq) >= 0) {printf("LL\n");}
+        else {printf("LR\n");}
+    } else { // fator(no) == -2
+        if (fator(no->dir) <= 0) {printf("RR\n");}
+        else {printf("RL\n");}
+    }
+    
 }

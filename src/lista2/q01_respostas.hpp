@@ -14,6 +14,6 @@
 inline const std::vector<int> ENTRADA{10, 20, 15, 12, 8, 5, 7, 1, 2};
 
 // (a) pré-ordem   (b) em-ordem   (c) pós-ordem   — deixe {} enquanto não responder
-inline const std::vector<int> RESP_PRE{};
-inline const std::vector<int> RESP_IN{};
-inline const std::vector<int> RESP_POS{};
+inline const std::vector<int> RESP_PRE{10,20,12,1,2,8,15,5,7};
+inline const std::vector<int> RESP_IN{1,12,2,20,8,10,5,15,7};
+inline const std::vector<int> RESP_POS{1,2,12,8,20,5,7,15,10};
