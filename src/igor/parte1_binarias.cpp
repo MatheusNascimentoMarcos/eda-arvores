@@ -18,7 +18,7 @@
 
 // 1.a) Estritamente binária: todo nó tem 0 ou 2 filhos. Árvore vazia => true.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(N) pois percorre acessa cada nó da arvore pelo menos uma vez
 auto estritaBin(NoBin* no) -> bool {
     if (!no) return true;
     if (!no->esq && !no->dir) return true;
@@ -54,7 +54,7 @@ auto emNiveis(NoBin* no) -> void {
 // 1.c) Perfeita: todos os nós internos têm 2 filhos e todas as folhas estão no mesmo nível.
 //      Árvore vazia => true.
 // PROPOSTA:
-// COMPLEXIDADE: O(log N) devido a arvore perfeita
+// COMPLEXIDADE: O(N log N) pois para cada nó é feita verificação da subarvore esq e dir  que corresponde a altura da arvore
 auto ehPerfeita(NoBin* no) -> bool {
     if (!no) return true;
     if (altura(no->esq) != altura(no->dir)) return false;
@@ -64,7 +64,7 @@ auto ehPerfeita(NoBin* no) -> bool {
 // 1.d) Completa: todos os níveis cheios, exceto possivelmente o último, preenchido
 //      da esquerda para a direita. Árvore vazia => true.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: ? (dúvida)
 auto ehCompleta(NoBin* no) -> bool {
     if (!no) return true;
     int he = altura(no->esq);
@@ -78,7 +78,7 @@ auto ehCompleta(NoBin* no) -> bool {
 // 1.e) Altura de um nó. CONVENÇÃO usada nos testes: folha = 0 e nó nulo = -1
 //      (se preferir folha = 1, mude ALTURA_FOLHA em tests/igor/helpers_igor.hpp).
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(N) pois visita cada nó uma vez em ambas as arvores mesmo no pior caso para calculo da altura
 auto altura(NoBin* no) -> int {
     if (!no){return 0;}
     int hd = altura(no->dir);
@@ -95,7 +95,7 @@ auto altura(NoBin* no) -> int {
 
 // 1.f) Pré-ordem. Imprima só as chaves.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(N) pois percorre cada nó exatamente uma vez
 auto preordem(NoBin* no) -> void {
     if(no){
         printf("%c ", no->chave);
@@ -106,7 +106,7 @@ auto preordem(NoBin* no) -> void {
 
 // 1.g) Pós-ordem. Imprima só as chaves.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(N) pois percorre cada nó exatamente uma vez
 auto posordem(NoBin* no) -> void {
     if (no)
     {
@@ -122,7 +122,7 @@ auto posordem(NoBin* no) -> void {
 
 // 1.h) In-ordem. Imprima só as chaves.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(N) pois percorre cada nó exatamente uma vez
 auto inorder(NoBin* no) -> void {
     if(no){
         inorder(no->esq);
