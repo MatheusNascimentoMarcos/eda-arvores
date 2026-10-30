@@ -12,7 +12,7 @@
 
 // 9) Fator de balanceamento = altura(esq) - altura(dir). Nó nulo => 0.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(N) por conta das chamadas a função de altura que percorre todos os nós da arvore
 auto fator(NoBin* no) -> int {
     if(!no){return 0;}
     
@@ -26,7 +26,7 @@ auto fator(NoBin* no) -> int {
 //        LR = esquerda-direita   -> rotação dupla à direita
 //        RL = direita-esquerda   -> rotação dupla à esquerda
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(N) por conta das chamadas a função fator
 auto qualRotacao(NoBin* no) -> void {
     if (fator(no) == 2) {
         if (fator(no->esq) >= 0) {printf("LL\n");}

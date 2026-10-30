@@ -12,7 +12,7 @@
 
 // 2(a) Remove e retorna o elemento de maior prioridade. Novo tamanho = N-1.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(Log N)  percorre  no pior caso a cada maior filho efetuando a subida de elemento para correção da fila de prioridade
 auto removeMax(int* heap, int N) -> int {
     int max = heap[0];
     N--;
@@ -37,7 +37,7 @@ auto removeMax(int* heap, int N) -> int {
 
 // 2(b) Insere 'valor' (heap tem N elementos e espaço em heap[N]). Novo tamanho = N+1.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(Log N) porque ele percorre a altura da heap no pior cenário
 auto insereHeap(int valor, int* heap, int N) -> void {
     int pos = N;
     heap[pos] = valor;

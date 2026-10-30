@@ -12,7 +12,7 @@
 
 // 11) O vetor heap[0..N-1] é um (max-)heap? N = 0 => true.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(N)  pois percorre todos os elementos do heap e compara com seu respectivo pai
 auto ehHeap(int* heap, int N) -> bool {
     for (int i = 1; i < N; i++) {
         if (heap[i] > heap[(i - 1) / 2]) return false;
@@ -23,7 +23,7 @@ auto ehHeap(int* heap, int N) -> bool {
 // 12) Insere 'elemento' no heap de N elementos (há espaço livre em heap[N]).
 //     Ao final o heap tem N+1 elementos.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(Log N)  porque ele percorre a altura da heap no pior cenário
 auto novo(int elemento, int* heap, int N) -> void {
     int pos = N;
     heap[pos] = elemento;

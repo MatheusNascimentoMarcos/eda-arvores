@@ -93,7 +93,7 @@ auto fatorBalanceamento(No* no) -> int {
 
 // 3(g) Percorre a árvore em níveis. fiquei em dúvida se a função deve fazer a leitura a partir de qualquer nó de toda arvóre ou só da subarvore a partir do nó raiz passado
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?) dúvida da complexidade deste
+// COMPLEXIDADE: tempo O(n·h) no pior caso, que é O(n²) na degenerada e O(n) na balanceada. Pois para cada nível a função em niveis chama a imprimir nivel que percorre os N nós do nível
 void imprimirNivelAtual(No* no, int nivelAtual) {
     if (!no) {
         return;

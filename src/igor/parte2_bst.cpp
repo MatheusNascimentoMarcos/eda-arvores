@@ -12,7 +12,7 @@
 // 2) Insere 'chave' na BST cuja raiz é 'no' (a raiz já existe, nunca é nula).
 //    Nos testes: chave repetida é ignorada (teste "2x").
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(H) no pior caso por percorrer a altura da arvore h = N e no caso da arvore balanceada a cada nível desce um dos 2 nós log h= Log N
 auto insere(char chave, NoBin* no) -> void {
     if (chave == no->chave) return;
     if(no->chave < chave){
@@ -33,7 +33,7 @@ auto insere(char chave, NoBin* no) -> void {
 
 // 3) Maior valor da BST. Árvore vazia => 'A'.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: O(h), que é O(n) no pior caso em caso de arvore degenerada para direita.
 auto maior(NoBin* no) -> char {
     if(!no){return 'A';}
     while (no->dir)
@@ -45,7 +45,7 @@ auto maior(NoBin* no) -> char {
 
 // 4) Menor valor da BST. Árvore vazia => 'Z'.
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: O(h), que é O(n) no pior caso de arvore degenerada para esquerda.
 auto menor(NoBin* no) -> char {
     if(!no){return 'Z';}
     while (no->esq)
@@ -58,7 +58,7 @@ auto menor(NoBin* no) -> char {
 // 5) Verifica se a árvore binária é uma BST. Árvore vazia => true.
 //    Cuidado: comparar só com os filhos diretos não basta!
 // PROPOSTA:
-// COMPLEXIDADE: tempo O(?)  espaço O(?)
+// COMPLEXIDADE: tempo O(N*h) pois a função percorre todos os nós e para cada no analisa o menor e maior qe temcoplexdade O(h), então no pior caso da arvore degenerar teremos O(N²)
 auto ehBinariaBusca(NoBin* no) -> bool {
     if (!no) return true;
     if (no->esq && maior(no->esq) >= no->chave) return false;
@@ -89,7 +89,7 @@ auto busca(char chave, NoBin* no) -> char {
 // 7) Elemento imediatamente anterior a 'chave' (maior chave < 'chave'). '\0' se não existir.
 //    Nos testes a chave pode NÃO estar na árvore (teste "7x"); mude se discordar.
 // PROPOSTA:
-// COMPLEXIDADE: O(h) por desecr sempre a altura da árvore
+// COMPLEXIDADE: O(h) por descer sempre a altura da árvore e sendo h = N no pior caso
 auto anterior(char chave, NoBin* no) -> char {
     char melhor = '\0';
     while (no) {
@@ -106,7 +106,7 @@ auto anterior(char chave, NoBin* no) -> char {
 
 // 8) Elemento imediatamente posterior a 'chave' (menor chave > 'chave'). '\0' se não existir.
 // PROPOSTA:
-// COMPLEXIDADE: O(h) por desecr sempre a altura da árvore
+// COMPLEXIDADE: O(h) por descer sempre a altura da árvore e sendo h = N no pior caso
 auto posterior(char chave, NoBin* no) -> char {
     char melhor = '\0';
     while (no) {
